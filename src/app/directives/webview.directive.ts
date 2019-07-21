@@ -1,10 +1,10 @@
-import { Directive } from '@angular/core';
+import { Directive, ElementRef } from '@angular/core';
 
 @Directive({
-  selector: 'webview'
+  selector: 'webview',
 })
 export class WebviewDirective {
-
-  constructor() { }
-
+  constructor(private el: ElementRef) {
+    this.el.nativeElement.style.height = '100%';
+  }
 }

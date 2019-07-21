@@ -3,6 +3,9 @@ import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -18,6 +21,7 @@ import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -25,25 +29,23 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    WebviewDirective
-  ],
+  declarations: [AppComponent, HomeComponent, WebviewDirective, LayoutComponent],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    NgZorroAntdModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
-        deps: [HttpClient]
-      }
-    })
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
-  providers: [ElectronService],
-  bootstrap: [AppComponent]
+  providers: [ElectronService, { provide: NZ_I18N, useValue: zh_CN }],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
