@@ -13,6 +13,7 @@
           <ul>
             <!-- nzSelected -->
             <li nz-menu-item (click)="go('https://mp.dayu.com/')">大鱼号</li>
+            <li nz-menu-item (click)="go('https://mp.sohu.com/mpfe/v3/login')">搜狐号</li>
           </ul>
         </li>
       </ul>
@@ -25,9 +26,10 @@
       </nz-breadcrumb>
       <nz-content>
         <router-outlet></router-outlet>
-        <webview #webview></webview>
-
-        <pre>{{UserAgent | json}}</pre>
+        <div class="flex">
+          <webview #webview class="flex-1" partition="persist:w1"></webview>
+          <webview #webview class="flex-1" partition="persist:w2"></webview>
+        </div>
       </nz-content>
     </nz-layout>
   </nz-layout>

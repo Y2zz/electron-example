@@ -7,53 +7,58 @@ import Cookie = Electron.Cookie;
   styleUrls: ['./layout.component.less'],
 })
 export class LayoutComponent implements OnInit, AfterViewInit {
-
   @ViewChildren('webview') webviews: QueryList<ElementRef>;
 
-  webview: WebviewTag;
+  webview1: WebviewTag;
+  webview2: WebviewTag;
 
   UserAgent: any[];
 
-  constructor() {
+  constructor() {}
 
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
-    this.webview = this.webviews.first.nativeElement;
-    // console.log(this.webview);
+    this.webview1 = this.webviews.first.nativeElement;
+    this.webview2 = this.webviews.last.nativeElement;
   }
 
   go(url: string) {
-    this.webview.src = url;
+    this.webview1.src = url;
 
-    this.webview.addEventListener('dom-ready', () => {
-      const session = this.webview.getWebContents().session;
+    this.webview1.addEventListener('dom-ready', () => {
+      const session = this.webview1.getWebContents().session;
 
-      // session.cookies.addListener('changed', () => {
-      //   session.cookies.get({ url: url }, (error, cookies) => {
-      //     // this.UserAgent = cookies;
-      //   });
-      // });
+      session.cookies.get({ domain: '' }, (error, cookies: Cookie[]) => {
+        this.UserAgent = [];
+        cookies.forEach(x => {
+          this.UserAgent.push({
+            domain: x.domain,
+            name: x.name,
+            value: x.value,
+          });
+        });
 
-      session.cookies.get({ domain: '.dayu.com' }, (error, cookies: Cookie[]) => {
-        // console.log('cookies:', cookies);
+        console.log('w1', this.UserAgent);
+      });
+    });
 
-        const v = cookies.map(x => ({
-          domain: x.domain, name: x.name, value: x.value,
-        }));
+    this.webview2.src = url;
 
-        if ( !this.UserAgent) {
-          this.UserAgent = [];
-        }
+    this.webview2.addEventListener('dom-ready', () => {
+      const session = this.webview2.getWebContents().session;
 
-        this.UserAgent.push(v); // = [...this.UserAgent, v];
+      session.cookies.get({ domain: '' }, (error, cookies: Cookie[]) => {
+        this.UserAgent = [];
+        cookies.forEach(x => {
+          this.UserAgent.push({
+            domain: x.domain,
+            name: x.name,
+            value: x.value,
+          });
+        });
 
-
-        console.log(this.UserAgent);
+        console.log('w2', this.UserAgent);
       });
     });
   }
